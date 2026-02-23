@@ -4,11 +4,13 @@
 .org 0x100
 FrameBuffer: .byte 256
 
+.dseg
 .org 0x200
 WRAM: ;this is where the game and variables are stored up to the 2KB limit
 
 
 
+.dseg
 .org 0x7A0
 ;CHIP8 STACK:
 VirtualStack: .byte 16*2 ;stack grows upward in memory (sp inc when push)
