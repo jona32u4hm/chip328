@@ -1,5 +1,5 @@
 # Project Settings
-TARGET   = main
+TARGET   = chip8
 MCU      = atmega328p
 PROGRAMMER = arduino
 PORT     = /dev/ttyUSB0
@@ -24,10 +24,10 @@ all: $(HEX)
 # so result is moved to the build directory.
 $(HEX): $(SRC)
 	@mkdir -p $(BUILD_DIR)
-	$(ASM) -fI -o $(TARGET).hex $(SRC)
-	@mv $(SRC_DIR)/$(TARGET).hex $(BUILD_DIR)/
+	$(ASM) -fI -o $(HEX) $(SRC)
+# @mv $(SRC_DIR)/$(TARGET).hex $(BUILD_DIR)/
 	@mv $(SRC_DIR)/$(TARGET).obj $(BUILD_DIR)/ 2>/dev/null || true
-	@mv $(SRC_DIR)/$(TARGET).cof $(BUILD_DIR)/ 2>/dev/null || true
+# @mv $(SRC_DIR)/$(TARGET).cof $(BUILD_DIR)/ 2>/dev/null || true
 	@mv $(SRC_DIR)/$(TARGET).eep.hex $(BUILD_DIR)/ 2>/dev/null || true
 
 # Flash to Hardware

@@ -16,3 +16,23 @@
 ; PC    -> r18-19
 ; I     -> r26-27 X
 ;
+.include "m328Pdef.inc"
+
+.org 0x0000
+    rjmp setup       ; Jump over the Interrupt Vector Table
+.org 0x0034
+setup:
+    ;set stack to top of WRAM:
+    ldi r16, LOW(RAMEND)
+    out SPL, r16
+    ldi r16, HIGH(RAMEND)
+    out SPH, r16
+loop:
+
+    ; FETCH
+
+    ; DECODE
+
+    ; EXECUTE
+    
+    rjmp loop      
