@@ -17,7 +17,6 @@
 ; I     -> r26-27 X
 ;
 .include "m328Pdef.inc"
-.include "src/RAM.asm"
 
 .equ CHIP8_FREQ = 600 
 
@@ -26,12 +25,9 @@
     rjmp setup       ; Jump over the Interrupt Vector Table
 
 .cseg
-.org 0x001c       ; This is the Timer1 Compare Match A vector
-    reti
+.org 0x0016       ; This is the Timer1 Compare Match A vector
+    jmp timer_increment
 
-.cseg
-.org 0x001e       ; This is the Timer1 Compare Match B vector
-    reti
 
 .cseg 
 .org 0x0034
@@ -43,9 +39,6 @@ setup:
     out SPH, r16
 setup_timer:
 
-    ldi r16,  0
-    sts TCCR1A, r16
-
     ;aprox 600Hz -> 26666 clock cycles 
     ldi r16, high(16000000/CHIP8_FREQ - 1)
     sts OCR1AH, r16
@@ -55,21 +48,19 @@ setup_timer:
     ; Configure TCCR1B:
     ; Bit 3 (WGM12) = 1  -> CTC Mode
     ; Bit 0 (CS10)  = 1  -> Prescaler = 1
+    ldi r16,  0
+    sts TCCR1A, r16
     ldi r16, (1 << CS10)
     sts TCCR1B, r16
 
-    ldi r16, (1 << OCIE1A)
+    ;Enable interrupt:
+    ldi r16, (1 << OCIE1A) 
     sts TIMSK1, r16
     sei
 
 
-    sbi DDRB, 5
 
 loop:
-    sbi PINB, 5
-    sleep ;cpu stops and waits for timer to wake it up at the chip8 frecuency
-
-    cbi PINB, 5
     sleep ;cpu stops and waits for timer to wake it up at the chip8 frecuency
     ; FETCH
 
@@ -78,3 +69,14 @@ loop:
     ; EXECUTE
 
     rjmp loop      
+
+
+
+
+
+
+
+
+
+.include "src/RAM.asm"
+.include "src/interrupts.asm"
