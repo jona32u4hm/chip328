@@ -15,10 +15,10 @@ WRAM: ;this is where the game and variables are stored up to the 2KB limit
 
 
 
-.org 0x7A0
 
-.org 0x800
+.org 0x7FF
 HardwareStack: ;this is the end of the hardware AVR stack which grows downward to lower memory addresses
+.org 0x800
 FrameBuffer: .byte 256
 
 ;----------------end of RAM----------------
