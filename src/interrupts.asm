@@ -6,7 +6,7 @@ timer_increment:
     push r16            ; Save flags to the stack
     lds r16, DivTimer
     ;reset semaphore 
-    andi r16, ~(1<<4)
+    andi r16, ~(1<<7)
     ;inc div timer
     inc r16
     cpi  r16, CHIP8_FREQ/60 ;if period not done, continue and store after the jump
@@ -16,7 +16,7 @@ timer_increment:
 period_done:
 
 
-    ;inc delay and sound timers
+    ;dec delay and sound timers
     lds r16, SoundTimer
     tst r16
     breq skip_sound_timer
@@ -32,8 +32,6 @@ skip_sound_timer:
     sts DelayTimer, r16
 
 skip_delay_timer:
-
-sbi PINB, 5    ; Writing 1 to PINB bit 5 toggles PORTB bit 5
 
 
     clr  r16 ;to store a 0 in DivTimer

@@ -25,7 +25,7 @@
     rjmp setup       ; Jump over the Interrupt Vector Table
 
 .cseg
-.org 0x0016       ; This is the Timer1 Compare Match A vector
+.org OC1Aaddr       ; This is the Timer1 Compare Match A vector
     jmp timer_increment
 
 
@@ -51,7 +51,7 @@ setup_timer:
     ; Bit 0 (CS10)  = 1  -> Prescaler = 1
     ldi r16,  0
     sts TCCR1A, r16
-    ldi r16, (1 << CS10)
+    ldi r16, (1 << CS10) | (1 << WGM12)
     sts TCCR1B, r16 
 
     ;Enable interrupt:
@@ -60,14 +60,18 @@ setup_timer:
     sei
 
 
+    ldi r16, 60
+    sts DelayTimer, r16
 
 loop:
     sleep ;cpu stops and waits for timer to wake it up at the chip8 frecuency
+    ;the following checks that cpu woke up from timer cpu and not some other interrupt:
     lds r16, DivTimer
-    sbrs r16, 7 ;if bit set skip the jump  --+
+    sbrc r16, 7 ;if bit clear skip the jump--+
     rjmp loop   ;if not, wait for interrupt  |
-    ldi r16, (1<<7) ;clear flag            <-+
+    ori r16, (1<<7) ;set flag              <-+
     sts DivTimer, r16
+
 
 
 
