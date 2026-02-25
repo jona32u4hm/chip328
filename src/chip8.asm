@@ -32,6 +32,7 @@
 .cseg 
 .org 0x0034
 setup:
+    sbi DDRB, 5        ; Data Direction Register B: bit 5 = 1 (Output)
     ;set stack to top of WRAM:
     ldi r16, LOW(RAMEND)
     out SPL, r16
@@ -51,7 +52,7 @@ setup_timer:
     ldi r16,  0
     sts TCCR1A, r16
     ldi r16, (1 << CS10)
-    sts TCCR1B, r16
+    sts TCCR1B, r16 
 
     ;Enable interrupt:
     ldi r16, (1 << OCIE1A) 
@@ -62,6 +63,15 @@ setup_timer:
 
 loop:
     sleep ;cpu stops and waits for timer to wake it up at the chip8 frecuency
+    lds r16, DivTimer
+    sbrs r16, 7 ;if bit set skip the jump  --+
+    rjmp loop   ;if not, wait for interrupt  |
+    ldi r16, (1<<7) ;clear flag            <-+
+    sts DivTimer, r16
+
+
+
+
     ; FETCH
 
     ; DECODE
