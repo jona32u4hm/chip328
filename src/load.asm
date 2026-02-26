@@ -1,3 +1,4 @@
+.cseg
 load_rom:
     ; 1. Point Z to the ROM in FLASH
     ldi r30, low(rom_data)  

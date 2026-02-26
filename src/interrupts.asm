@@ -15,6 +15,8 @@ timer_increment:
 
 period_done:
 
+    cbi PORTB, 5 ;buzzer off 
+
 
     ;dec delay and sound timers
     lds r16, SoundTimer
@@ -22,6 +24,8 @@ period_done:
     breq skip_sound_timer
     dec r16
     sts SoundTimer, r16
+
+    sbi PORTB, 5 ;Active buzzer on if sound timer is counting
 
 skip_sound_timer:
 

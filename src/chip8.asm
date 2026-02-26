@@ -1,6 +1,9 @@
 ;chip8 interpreter for ATmega328P
 ;written by Jonatan HidalgoMorales in 2026
-
+;
+;
+;
+;
 ;--------MEMORY MAP:--------
 ;0x000-0x1FF CHIP8 Interpreter RAM:
 ;   0x000 - 0x01F -> 32 Registers
@@ -16,6 +19,12 @@
 ; PC    -> r18-19
 ; I     -> r26-27 X
 ;
+;--------I/O--------
+;pin13 -> Active buzzer
+;
+;
+
+
 .include "m328Pdef.inc"
 
 .equ CHIP8_FREQ = 600 
@@ -60,8 +69,8 @@ setup_timer:
     sei
 
 
-    ldi r16, 60
-    sts DelayTimer, r16
+    call load_rom
+
 
 loop:
     sleep ;cpu stops and waits for timer to wake it up at the chip8 frecuency
