@@ -94,3 +94,4 @@ loop:
 
 .include "src/RAM.asm"
 .include "src/interrupts.asm"
+.include "src/ROM.asm"
